@@ -244,7 +244,7 @@ def main():
         print("choice not accepted")
         
 
-#calling the main function
+#calling the main func
 if __name__ == "__main__":
     print("\nWELCOME TO\nWHERE TO FOOD\n")
     main()
