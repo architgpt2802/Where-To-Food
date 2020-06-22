@@ -64,7 +64,7 @@ def scorecal(rating, offer):
 #scraping the restaurants for online orders      
 def scrape_online_delv(pageNo):
    
-    r = requests.get("https://www.zomato.com/ncr/nangloi-order-online?delivery_subzone=10530&page=%d"%pageNo, cookies = cookie_jar, headers = headersUA)
+    r = requests.get("https://www.zomato.com/ncr/west-delhi-order-online?page=%d"%pageNo, cookies = cookie_jar, headers = headersUA)
 
     soup = BS(r.text, "html.parser")
     my_divs = soup.find_all("div", {"class" : "search-o2-card"})
@@ -134,7 +134,7 @@ def scrape_dine_out(pageNo):
     global dineOffer
     global dineOfferValue
 
-    r = requests.get("https://www.zomato.com/ncr/nangloi-delhi-restaurants?table_booking=1&page=%d"%pageNo, cookies = cookie_jar, headers = headersUA)
+    r = requests.get("https://www.zomato.com/ncr/west-delhi-restaurants?table_booking=1&page=%d"%pageNo, cookies = cookie_jar, headers = headersUA)
     #print(r.text)
         
     soup = BS(r.text, "html.parser")
