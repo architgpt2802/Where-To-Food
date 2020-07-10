@@ -231,11 +231,11 @@ def main():
                         print("*****\n")
                     
                     #sms notification
-                    if (Rest['rstScore'] > 150.0):
+                    if (Rest['rstScore'] > 120.0):
                         msg = '\nOffer alert from WHERE TO FOOD\n' +str(Rest['rstName']) +'\n' +str(Rest['rstRating']) +'\n' +str(Rest['rstCatg']) +'\n' +str(Rest['rstOffer']) +'\n' +str(Rest['rstLink'])
                         sms = client.messages.create(to = my_num, from_ = twilio_num, body = msg)
                     
-                time.sleep(60)
+                time.sleep(3600)
                 
                 """
                 answer = None
