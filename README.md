@@ -11,7 +11,7 @@ Also it has two option for **Online Order** and **Dine Out** restaurants. I can 
 I also get some info about the restaurant such as it's **category** and **open timings** of the restaurant.
 But the best thing is that it also gives the **direct link to the restaurant's order page on zomato** so i can simply order by clicking on the link instead of searching for the restaurant manually.
 
-##SMS ALERT
+## SMS ALERT
 
 I have also added a feature that **automatically alerts me via a text SMS** whenever a restauraunt is providing an awesome deal. **So now i never miss any _steal deal_**.
 
