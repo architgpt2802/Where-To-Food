@@ -45,6 +45,9 @@ listing of the restaurants in my project
 
 ![](screensnaps/dine_out_2.png)
 
+offer alert via sms
+![](screensnaps/sms2.jpeg)
+
 ## REFERENCE and SERVICE I USED
 
 [**TECH RAJ** (youtube)](https://www.youtube.com/watch?v=r1T_Q24Ucng&feature=youtu.be)
