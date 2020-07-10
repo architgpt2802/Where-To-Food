@@ -17,6 +17,14 @@ from bs4 import BeautifulSoup as BS
 import json
 import requests
 import re
+from conf import account_sid, auth_token, twilio_num, my_num    #module to store the api keys and phone numbers form twilio
+from twilio.rest import Client
+import time
+import threading
+
+
+#client stores twilio api keys and tokens
+client = Client(account_sid, auth_token)
 
 
 cookie_jar = dict()
@@ -204,22 +212,45 @@ def main():
     
     #online order
     if (opt == 2):
-    
-        for i in range(1,2): #range of the pages to look into
-            Rests = scrape_online_delv(i)
+        
+        cont = 1
+        while (cont):
+            for i in range(1,2): #range of the pages to look into
+                Rests = scrape_online_delv(i)
             
-            for Rest in Rests:
+                for Rest in Rests:
                 
-                if (Rest['rstScore'] > 30.0): #rest below the score of 30 should not be listed
-                    print("\nRestaurant Details")
-                    print("Name: %s"%Rest['rstName'])
-                    print("Rating: %s"%Rest['rstRating'])
-                    print("Category: %s"%Rest['rstCatg'])
-                    print("Offer: %s"%Rest['rstOffer'])
-                    print("Score: %s"%Rest['rstScore'])
-                    print("Link: %s"%Rest['rstLink'])
-                    print("*****\n")
-   
+                    if (Rest['rstScore'] > 30.0): #rest below the score of 30 should not be listed
+                        print("\nRestaurant Details")
+                        print("Name: %s"%Rest['rstName'])
+                        print("Rating: %s"%Rest['rstRating'])
+                        print("Category: %s"%Rest['rstCatg'])
+                        print("Offer: %s"%Rest['rstOffer'])
+                        print("Score: %s"%Rest['rstScore'])
+                        print("Link: %s"%Rest['rstLink'])
+                        print("*****\n")
+                    
+                    #sms notification
+                    if (Rest['rstScore'] > 150.0):
+                        msg = '\nOffer alert from WHERE TO FOOD\n' +str(Rest['rstName']) +'\n' +str(Rest['rstRating']) +'\n' +str(Rest['rstCatg']) +'\n' +str(Rest['rstOffer']) +'\n' +str(Rest['rstLink'])
+                        sms = client.messages.create(to = my_num, from_ = twilio_num, body = msg)
+                    
+                time.sleep(60)
+                
+                """
+                answer = None
+                    
+                def check():
+                    time.sleep(30)
+                    if answer != None:
+                        cont = 0
+                        return
+                        
+                Thread(target = check).start()
+                answer = int(input("Press any key to exit: "))
+                """
+                    
+                    
     #dine out
     elif (opt == 1):
 
