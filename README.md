@@ -23,6 +23,23 @@ For the sms alerts, I am using [**TWILIO**](https://www.twilio.com/) messaging s
 screenshot of the sms alert i got from my system
 ![](screensnaps/sms1.jpeg)
 
+## CONF.PY
+
+conf.py is a file that contains **credentials** for sms fuctionality such **API keys and auth tokens for twilio and phone numbers of recipients and my twilio phone number**.
+This information should never be shared and are private. So i have not commited these files to github repository.
+
+### SCRIPT IN CONF.PY
+
+'''python
+account_sid = 'my twilio account sid'
+
+auth_token = 'my twilio account auth token'
+
+twilio_num = 'my twilio phn number'
+
+my_num = 'my phone number'
+'''
+
 ## INPUTS
 
 User can give **1** as input for **dine out** options and **2** for **online order** options.
