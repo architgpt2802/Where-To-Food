@@ -11,6 +11,7 @@ Also it has two option for **Online Order** and **Dine Out** restaurants. I can 
 I also get some info about the restaurant such as it's **category** and **open timings** of the restaurant.
 But the best thing is that it also gives the **direct link to the restaurant's order page on zomato** so i can simply order by clicking on the link instead of searching for the restaurant manually.
 
+
 ## SMS ALERT
 
 I have also added a feature that **automatically alerts me via a text SMS** whenever a restauraunt is providing an awesome deal. **So now i never miss any _steal deal_**.
@@ -22,6 +23,7 @@ For the sms alerts, I am using [**TWILIO**](https://www.twilio.com/) messaging s
 
 screenshot of the sms alert i got from my system
 ![](screensnaps/sms1.jpeg)
+
 
 ## CONF.PY
 
@@ -40,9 +42,11 @@ twilio_num = 'my twilio phn number'
 my_num = 'my phone number'
 ```
 
+
 ## INPUTS
 
-User can give **1** as input for **dine out** options and **2** for **online order** options.
+> User can give **1** as input for **dine out** options and **2** for **online order** options.
+
 
 ## SCREEN SNAPS
 
@@ -65,11 +69,13 @@ listing of the restaurants in my project
 offer alert via sms
 ![](screensnaps/sms2.jpeg)
 
+
 ## REFERENCE and SERVICE I USED
 
 [**TECH RAJ** (youtube)](https://www.youtube.com/watch?v=r1T_Q24Ucng&feature=youtu.be)
 
 [**TWILIO**](https://www.twilio.com/)
+
 
 ## CREATED BY
 
