@@ -30,7 +30,7 @@ screenshot of the sms alert i got from my system
 conf.py is a file that contains **credentials** for sms fuctionality such **API keys and auth tokens for twilio and phone numbers of recipients and my twilio phone number**.
 This information should never be shared and are private. So i have not commited these files to github repository.
 
-### SCRIPT IN CONF.PY
+#### SCRIPT IN CONF.PY
 
 ```python
 account_sid = 'my twilio account sid'
