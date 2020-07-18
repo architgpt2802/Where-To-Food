@@ -30,7 +30,7 @@ This information should never be shared and are private. So i have not commited 
 
 ### SCRIPT IN CONF.PY
 
-'''python
+```python
 account_sid = 'my twilio account sid'
 
 auth_token = 'my twilio account auth token'
@@ -38,7 +38,7 @@ auth_token = 'my twilio account auth token'
 twilio_num = 'my twilio phn number'
 
 my_num = 'my phone number'
-'''
+```
 
 ## INPUTS
 
