@@ -9,7 +9,7 @@ Created on Wed Jun 17 18:44:52 2020
 ***WHERE TO FOOD***
 a program to scrape the zomato website and look for restaurants providing the best deals.
 it will calculate a score based on the rating of the restaurant and discount available.
-the restaurants will be listed on the bases of a higher WTF Score. 
+the restaurants will be listed on the bases of a higher Score. 
 """
 
 
@@ -19,8 +19,20 @@ import requests
 import re
 from conf import account_sid, auth_token, twilio_num, my_num    #module to store the api keys and phone numbers form twilio
 from twilio.rest import Client
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
 import time
 import threading
+
+
+#file import
+dataset = pd.read_csv('where_to_food_data.csv')
+x=dataset.iloc[:,1:-1].values
+y=dataset.iloc[:,-1].values
+
+
+xinp = []
 
 
 #client stores twilio api keys and tokens
@@ -201,6 +213,68 @@ def scrape_dine_out(pageNo):
     return sortedAllDine
  
 
+#suggest me
+def scrape_suggest_me(pageNo):
+   
+    r = requests.get("https://www.zomato.com/ncr/west-delhi-order-online?page=%d"%pageNo, cookies = cookie_jar, headers = headersUA)
+
+    soup = BS(r.text, "html.parser")
+    my_divs = soup.find_all("div", {"class" : "search-o2-card"})
+    
+    for div in my_divs:
+        #name of the rest
+        rstName = div.findChildren("a", {"class" : "result-order-flow-title"})[0].text.strip()
+        
+        #link to the direct page of the rest on zomato
+        link = []
+        link = div.findChildren("a", attrs = {'href' : re.compile("^https://")})
+        rstLink = link[0].get('href')
+        
+        #rating of the rest
+        if (div.findChildren("span",{"class" : "rating-value"})): 
+            rstRating = div.findChildren("span",{"class" : "rating-value"})[0].text.strip()
+    
+            rstRating = float(rstRating)
+    
+        else:
+            rstRating = 0.0
+            
+        #category of the rest
+        rstCatg = div.findChildren("div", {"class" : "grey-text"})[0].text.strip()
+        
+        #finding the offers available
+        rstOffer = "No Offer"
+        rstOfferValue = 0
+        
+        if(div.findChildren("span", {"class" : "offer-text"})):
+            rstOffer = div.findChildren("span", {"class" : "offer-text"})[0].text.strip()
+            
+            #if u"\u20b9" in rstOffer:
+                #rstOfferValue = rstOffer[rstOffer.index(u"\u20b9")+1:rstOffer.index(" ")]
+            if "%" in rstOffer:
+                rstOfferValue = int((rstOffer[0:rstOffer.index("%")]).strip())
+           
+        #calling the func to calculate the rest score
+        rstScore = scorecal(rstRating, rstOfferValue)
+        #print(rstScore)
+        
+        rstInfo = dict()
+        
+        rstInfo['rstName'] = rstName
+        rstInfo['rstRating'] = rstRating
+        rstInfo['rstCatg'] = rstCatg
+        rstInfo['rstOffer'] = rstOffer
+        rstInfo['rstScore'] = rstScore
+        rstInfo['rstLink'] = rstLink
+        
+        allRest.append(rstInfo)
+        
+        sortedAllRest = sorted(allRest, key = lambda i: i['rstScore'], reverse = True)
+        
+    return sortedAllRest
+ 
+
+
 #main function
 def main():
     
@@ -208,7 +282,7 @@ def main():
     connect_zomato()
     
     #option to choose to order online or dine out
-    opt = int(input("Wanna DINE OUT or ORDER ONLINE\n(1 or 2): "))
+    opt = int(input("Wanna DINE OUT or ORDER ONLINE\nOr we could suggest you based on your previous orders!\n(1, 2 or 3): "))
     
     #online order
     if (opt == 2):
@@ -269,7 +343,82 @@ def main():
                     print("Score: %s"%Dine['dineScore'])
                     print("Link: %s"%Dine['dineLink'])
                     print("*****\n")     
+    
+    
+    #suggest me
+    elif (opt == 3):
+
         
+        weekday = 0
+        weekend = 0
+        breakfast = 0
+        lunch = 0
+        dinner = 0
+
+        clas=LogisticRegression()
+        clas.fit(x,y)
+        
+        #input
+        week = int(input("Weekday or Weekend? (1/2): "))
+        order_time = int(input("Breakfast, Lunch or Dinner? (1/2/3): "))
+        
+        if week == 1:
+            weekday = 1
+        else:
+            weekend = 1
+            
+        if order_time == 1:
+            breakfast = 1
+        elif order_time == 2:
+            lunch = 1
+        else:
+            dinner = 1
+            
+        xinp.append(weekday)
+        xinp.append(weekend)
+        xinp.append(breakfast)
+        xinp.append(lunch)
+        xinp.append(dinner)
+        
+        xinp_np = np.array(xinp)
+        xinp_np = xinp_np.reshape(1, 5)
+        
+        ypred = clas.predict(xinp_np)
+        ypred = ypred[0]
+        #print(ypred)
+        
+        Ctg = ''
+        if ypred == 1:
+            Ctg = 'North Indian'
+        elif ypred == 2:
+            Ctg = 'Italian'
+        elif ypred == 3:
+            Ctg = 'Chinese'
+        else:
+            Ctg = 'Fast Food'
+
+        print(Ctg)
+        
+        
+        for i in range(1,2): #range of the pages to look into
+            Rests = scrape_suggest_me(i)
+            
+            for Rest in Rests:
+                
+                if (Rest['rstScore'] > 35.0): #rest below the score of 35 should not be listed
+                    
+                    if( Ctg in Rest['rstCatg']):
+                
+                        print("\nRestaurant Details")
+                        print("Name: %s"%Rest['rstName'])
+                        print("Rating: %s"%Rest['rstRating'])
+                        print("Category: %s"%Rest['rstCatg'])
+                        print("Offer: %s"%Rest['rstOffer'])
+                        print("Score: %s"%Rest['rstScore'])
+                        print("Link: %s"%Rest['rstLink'])
+                        print("*****\n")     
+    
+    
     #wrong choice
     else:
         print("choice not accepted")
