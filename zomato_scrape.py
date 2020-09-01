@@ -28,12 +28,10 @@ import threading
 
 #file import
 dataset = pd.read_csv('where_to_food_data.csv')
-x=dataset.iloc[:,1:-1].values
-y=dataset.iloc[:,-1].values
-
+x = dataset.iloc[:,1:-1].values
+y = dataset.iloc[:,-1].values
 
 xinp = []
-
 
 #client stores twilio api keys and tokens
 client = Client(account_sid, auth_token)
@@ -55,7 +53,8 @@ def getcookies():
     for i in cData:
         name = i["name"]
         value = i["value"]
-        cookie_jar[name] = value
+        cookie_jar[name] = value    #here we are making a dictionary cookie_jar
+                                    #of name and value of the cookies from the file
         
 
 #providing zomato user agent of a chrome user on windows        
@@ -85,7 +84,7 @@ def scorecal(rating, offer):
 def scrape_online_delv(pageNo):
    
     r = requests.get("https://www.zomato.com/ncr/west-delhi-order-online?page=%d"%pageNo, cookies = cookie_jar, headers = headersUA)
-
+    #request takes url as argument and gives string containing HTML
     soup = BS(r.text, "html.parser")
     my_divs = soup.find_all("div", {"class" : "search-o2-card"})
     
@@ -95,7 +94,7 @@ def scrape_online_delv(pageNo):
         
         #link to the direct page of the rest on zomato
         link = []
-        link = div.findChildren("a", attrs = {'href' : re.compile("^https://")})
+        link = div.findChildren("a", attrs = {'href' : re.compile("^https://")})    #re.compile helps in pattern matching
         rstLink = link[0].get('href')
         
         #rating of the rest
@@ -163,10 +162,10 @@ def scrape_dine_out(pageNo):
         
         #name of the rest
         dineName = div.findChildren("a", {"class" : "result-title"})[0].text.strip()
-           
+ 
         #direct link to the rest page on zomato
         link = []
-        link = div.findChildren("a", attrs = {'href' : re.compile("^https://")})
+        link = div.findChildren("a", attrs = {'href' : re.compile("^https://")})    #re.compile helps in pattern mathcing
         dineLink = link[0].get('href')
             
         #rating of the rest
@@ -227,7 +226,7 @@ def scrape_suggest_me(pageNo):
         
         #link to the direct page of the rest on zomato
         link = []
-        link = div.findChildren("a", attrs = {'href' : re.compile("^https://")})
+        link = div.findChildren("a", attrs = {'href' : re.compile("^https://")})   #re.compile helps in pattern matching
         rstLink = link[0].get('href')
         
         #rating of the rest
@@ -305,7 +304,7 @@ def main():
                         print("*****\n")
                     
                     #sms notification
-                    if (Rest['rstScore'] > 120.0):
+                    if (Rest['rstScore'] >120.0):
                         msg = '\nOffer alert from WHERE TO FOOD\n' +str(Rest['rstName']) +'\n' +str(Rest['rstRating']) +'\n' +str(Rest['rstCatg']) +'\n' +str(Rest['rstOffer']) +'\n' +str(Rest['rstLink'])
                         sms = client.messages.create(to = my_num, from_ = twilio_num, body = msg)
                     

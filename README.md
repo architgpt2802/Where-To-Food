@@ -8,6 +8,8 @@ It helps me save time in searching for a restaurant and also saves my money as I
 
 Also it has two option for **Online Order** and **Dine Out** restaurants. I can select what list I want to see.
 
+There is also a third option **Suggest Me** which using **Machine Learning** can recommend me the category of food I may like to have.
+
 I also get some info about the restaurant such as it's **category** and **open timings** of the restaurant.
 But the best thing is that it also gives the **direct link to the restaurant's order page on zomato** so i can simply order by clicking on the link instead of searching for the restaurant manually.
 
@@ -23,6 +25,17 @@ For the sms alerts, I am using [**TWILIO**](https://www.twilio.com/) messaging s
 
 screenshot of the sms alert i got from my system
 ![](screensnaps/sms1.jpeg)
+
+
+## SUGGEST ME
+
+Sometimes it is even difficult to choose what you want to order. There comes the **Suggest Me** option which uses ML to recommend me what I may like to have based on my previous order history.
+
+The independent variables are is it a Weekday or Weekend and it's Breakfast or Lunch or Dinner I am ordering for.
+Then using **Logistic Regression**, it predicts the category of food and lists the restaurants where that category of food is available.
+
+Screenshot of the Suggest Me feature
+![](screensnaps/suggest_me_1.jpg) 
 
 
 ## CONF.PY
